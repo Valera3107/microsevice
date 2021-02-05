@@ -1,0 +1,9 @@
+rootProject.name = 'spring-cloud-microsevices'
+include 'bill-service'
+include 'deposite-service'
+include 'config-service'
+include 'geteway-service'
+include 'notification-service'
+include 'registry'
+include 'account-service'
+
