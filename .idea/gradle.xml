@@ -13,7 +13,7 @@
             <option value="$PROJECT_DIR$/bill-service" />
             <option value="$PROJECT_DIR$/config-service" />
             <option value="$PROJECT_DIR$/deposite-service" />
-            <option value="$PROJECT_DIR$/geteway-service" />
+            <option value="$PROJECT_DIR$/gateway" />
             <option value="$PROJECT_DIR$/notification-service" />
             <option value="$PROJECT_DIR$/registry" />
           </set>

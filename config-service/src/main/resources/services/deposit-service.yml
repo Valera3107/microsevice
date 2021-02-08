@@ -1,16 +1,16 @@
 spring:
   jpa:
-    database: POSTGRESQL
+    database: MYSQL
     properties.hibernate.temp.use_jdbc_metadata_defaults: false
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
   datasource:
-    platform: postgres
-    url: jdbc:postgresql://localhost:5432/dsposit_service_database
-    username: postgres
+    platform: mysql
+    url: jdbc:mysql://db:3306/deposit_service_database?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&useUnicode=yes&characterEncoding=UTF-8
+    username: root
     password: root
-    driver-class-name: org.postgresql.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
   rabbitmq:
     port: 5672
@@ -20,3 +20,6 @@ spring:
     listener:
       direct:
         default-requeue-rejected: true
+
+server:
+  port: 9898

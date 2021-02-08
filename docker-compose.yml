@@ -1,0 +1,107 @@
+version: '3.5'
+services:
+  config-service:
+    container_name: config-service
+    build: config-service
+    ports:
+      - 8001:8001
+
+  registry:
+    container_name: registry
+    restart: always
+    build: registry
+    ports:
+      - 8761:8761
+    depends_on:
+      - config-service
+
+  gateway:
+    container_name: gateway
+    restart: always
+    build: gateway
+    ports:
+      - 8989:8989
+    depends_on:
+      - config-service
+      - registry
+
+  account-service:
+    restart: on-failure
+    container_name: account-service
+    build: account-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/account_service_database?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    ports:
+      - 8081:8081
+    depends_on:
+      - config-service
+      - registry
+      - db
+
+  bill-service:
+    restart: on-failure
+    container_name: bill-service
+    build: bill-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/bill_service_database?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    ports:
+      - 8082:8082
+    depends_on:
+      - config-service
+      - registry
+
+  deposit-service:
+    restart: on-failure
+    container_name: deposite-service
+    build: deposite-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/deposit_service_database?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    ports:
+      - 9898:9898
+    depends_on:
+      - config-service
+      - registry
+
+  notification-service:
+    restart: on-failure
+    container_name: notification-service
+    build: notification-service
+    depends_on:
+      - config-service
+      - registry
+
+  rabbitmq: # login guest:guest
+    image: rabbitmq:3-management
+    hostname: rabbitmq
+    labels:
+      NAME: "rabbitmq"
+    ports:
+      - 5672:5672
+      - 15672:15672
+    depends_on:
+      - config-service
+      - registry
+      - account-service
+
+  db:
+    image: mysql
+    restart: always
+    ports:
+      - "3307:3307"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: account_service_database
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+    volumes:
+      - ./init:/docker-entrypoint-initdb.d
+
+volumes:
+  db-data:
+    driver: local
