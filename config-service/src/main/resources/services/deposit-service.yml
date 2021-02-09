@@ -1,16 +1,15 @@
 spring:
   jpa:
-    database: MYSQL
-    properties.hibernate.temp.use_jdbc_metadata_defaults: false
     hibernate:
       ddl-auto: update
     properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
   datasource:
-    platform: mysql
-    url: jdbc:mysql://db:3306/deposit_service_database?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&useUnicode=yes&characterEncoding=UTF-8
+    url: jdbc:mysql://db:3306/deposit_service_database?serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: root
     password: root
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    initialization-mode: always
 
   rabbitmq:
     port: 5672
@@ -23,3 +22,5 @@ spring:
 
 server:
   port: 9898
+  compression:
+    enabled: true
